@@ -21,7 +21,7 @@
 
 direction_e player_dir = DIR_DOWN;
 
-void adventure_init(void) BANKED
+void tank_init(void) BANKED
 {
   // Set camera to follow player
   camera_offset_x = 0;
@@ -30,7 +30,7 @@ void adventure_init(void) BANKED
   camera_deadzone_y = ADVENTURE_CAMERA_DEADZONE;
 }
 
-void adventure_update(void) BANKED
+void tank_update(void) BANKED
 {
   actor_t *hit_actor;
   UBYTE tile_start, tile_end;
