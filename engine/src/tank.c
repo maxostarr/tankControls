@@ -19,7 +19,7 @@
 #endif
 
 #ifndef TANK_TURN_SPEED
-#define TANK_TURN_SPEED 8
+#define TANK_TURN_SPEED 2
 #endif
 
 UBYTE last_angle = 0;
@@ -37,7 +37,7 @@ void tank_update(void) BANKED
 {
   actor_t *hit_actor;
   UBYTE tile_start, tile_end;
-  UBYTE angle = 0;
+  UBYTE angle = last_angle;
   direction_e new_dir = DIR_DOWN;
 
   player_moving = FALSE;
@@ -197,14 +197,17 @@ void tank_update(void) BANKED
     }
   }
 
-  if (new_dir != DIR_NONE)
-  {
-    actor_set_dir(&PLAYER, new_dir, player_moving);
-  }
-  else
-  {
-    actor_set_anim_idle(&PLAYER);
-  }
+  // if (new_dir != DIR_NONE)
+  // {
+  //   actor_set_dir(&PLAYER, new_dir, player_moving);
+  // }
+  // else
+  // {
+  //   actor_set_anim_idle(&PLAYER);
+  // }
+
+  UBYTE anim_frame = angle >> 5;
+  actor_set_frame_offset(&PLAYER, anim_frame);
 
   hit_actor = NULL;
   if (IS_FRAME_ODD)
