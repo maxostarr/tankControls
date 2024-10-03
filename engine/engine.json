@@ -1,7 +1,7 @@
 {
-  "version": "4.0.0-e0",
+  "version": "4.2.0-e1",
   "sceneTypes": {
     "key": "tank",
-    "label": "Tank",
+    "label": "Tank"
   }
 }

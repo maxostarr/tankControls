@@ -1,7 +1,6 @@
 #pragma bank 255
 
 #include "data/states_defines.h"
-// #include "states/adventure.h"
 
 #include "actor.h"
 #include "camera.h"
@@ -19,7 +18,11 @@
 #define ADVENTURE_CAMERA_DEADZONE 8
 #endif
 
-direction_e player_dir = DIR_DOWN;
+#ifndef TANK_TURN_SPEED
+#define TANK_TURN_SPEED 8
+#endif
+
+UBYTE last_angle = 0;
 
 void tank_init(void) BANKED
 {
@@ -35,23 +38,28 @@ void tank_update(void) BANKED
   actor_t *hit_actor;
   UBYTE tile_start, tile_end;
   UBYTE angle = 0;
-  // direction_e new_dir = actor_get_dir(&PLAYER);
+  direction_e new_dir = DIR_DOWN;
 
   player_moving = FALSE;
 
   if (INPUT_LEFT)
   {
-    player_dir += 32;
-    player_dir &= 0b11000;
+    angle = (last_angle - TANK_TURN_SPEED) % 256;
+    // angle &= 0b11000;
+  }
+  else if (INPUT_RIGHT)
+  {
+    angle = (last_angle + TANK_TURN_SPEED) % 256;
+    // angle &= 0b11000;
   }
 
-  if (INPUT_RIGHT)
-  {
-    player_dir -= 32;
-    player_dir &= 0b11000;
-  }
+  last_angle = angle;
 
   if (INPUT_UP)
+  {
+    player_moving = TRUE;
+  }
+  else if (INPUT_DOWN)
   {
     player_moving = TRUE;
   }
@@ -220,11 +228,10 @@ void tank_update(void) BANKED
   {
     if (!hit_actor)
     {
-      hit_actor = actor_in_front_of_player(8, TRUE);
-    }
-    if (hit_actor && !hit_actor->collision_group && hit_actor->script.bank)
-    {
-      script_execute(hit_actor->script.bank, hit_actor->script.ptr, 0, 1, 0);
+      if (hit_actor && !hit_actor->collision_group && hit_actor->script.bank)
+      {
+        script_execute(hit_actor->script.bank, hit_actor->script.ptr, 0, 1, 0);
+      }
     }
   }
 }
