@@ -19,6 +19,8 @@
 #define ADVENTURE_CAMERA_DEADZONE 8
 #endif
 
+direction_e player_dir = DIR_DOWN;
+
 void adventure_init(void) BANKED
 {
   // Set camera to follow player
@@ -33,69 +35,86 @@ void adventure_update(void) BANKED
   actor_t *hit_actor;
   UBYTE tile_start, tile_end;
   UBYTE angle = 0;
-  direction_e new_dir = DIR_NONE;
+  // direction_e new_dir = actor_get_dir(&PLAYER);
 
   player_moving = FALSE;
 
-  if (INPUT_RECENT_LEFT)
-  {
-    new_dir = DIR_LEFT;
-  }
-  else if (INPUT_RECENT_RIGHT)
-  {
-    new_dir = DIR_RIGHT;
-  }
-  else if (INPUT_RECENT_UP)
-  {
-    new_dir = DIR_UP;
-  }
-  else if (INPUT_RECENT_DOWN)
-  {
-    new_dir = DIR_DOWN;
-  }
-
   if (INPUT_LEFT)
   {
-    player_moving = TRUE;
-    if (INPUT_UP)
-    {
-      angle = ANGLE_315DEG;
-    }
-    else if (INPUT_DOWN)
-    {
-      angle = ANGLE_225DEG;
-    }
-    else
-    {
-      angle = ANGLE_270DEG;
-    }
+    player_dir += 32;
+    player_dir &= 0b11000;
   }
-  else if (INPUT_RIGHT)
+
+  if (INPUT_RIGHT)
+  {
+    player_dir -= 32;
+    player_dir &= 0b11000;
+  }
+
+  if (INPUT_UP)
   {
     player_moving = TRUE;
-    if (INPUT_UP)
-    {
-      angle = ANGLE_45DEG;
-    }
-    else if (INPUT_DOWN)
-    {
-      angle = ANGLE_135DEG;
-    }
-    else
-    {
-      angle = ANGLE_90DEG;
-    }
   }
-  else if (INPUT_UP)
-  {
-    player_moving = TRUE;
-    angle = ANGLE_0DEG;
-  }
-  else if (INPUT_DOWN)
-  {
-    player_moving = TRUE;
-    angle = ANGLE_180DEG;
-  }
+
+  // if (INPUT_RECENT_LEFT)
+  // {
+  //   new_dir = DIR_LEFT;
+  // }
+  // else if (INPUT_RECENT_RIGHT)
+  // {
+  //   new_dir = DIR_RIGHT;
+  // }
+  // else if (INPUT_RECENT_UP)
+  // {
+  //   new_dir = DIR_UP;
+  // }
+  // else if (INPUT_RECENT_DOWN)
+  // {
+  //   new_dir = DIR_DOWN;
+  // }
+
+  // if (INPUT_LEFT)
+  // {
+  //   player_moving = TRUE;
+  //   if (INPUT_UP)
+  //   {
+  //     angle = ANGLE_315DEG;
+  //   }
+  //   else if (INPUT_DOWN)
+  //   {
+  //     angle = ANGLE_225DEG;
+  //   }
+  //   else
+  //   {
+  //     angle = ANGLE_270DEG;
+  //   }
+  // }
+  // else if (INPUT_RIGHT)
+  // {
+  //   player_moving = TRUE;
+  //   if (INPUT_UP)
+  //   {
+  //     angle = ANGLE_45DEG;
+  //   }
+  //   else if (INPUT_DOWN)
+  //   {
+  //     angle = ANGLE_135DEG;
+  //   }
+  //   else
+  //   {
+  //     angle = ANGLE_90DEG;
+  //   }
+  // }
+  // else if (INPUT_UP)
+  // {
+  //   player_moving = TRUE;
+  //   angle = ANGLE_0DEG;
+  // }
+  // else if (INPUT_DOWN)
+  // {
+  //   player_moving = TRUE;
+  //   angle = ANGLE_180DEG;
+  // }
 
   if (player_moving)
   {
